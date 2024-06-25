@@ -26,6 +26,30 @@ body {
   flex-direction: column;
 }
 
+.navbar {
+  width: 100%;
+  background-color: #1b1c1d;
+  color: white;
+  padding:  20px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-link {
+  color: rgba(249, 211, 180, 1);
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: rgb(185, 156, 132);
+}
+
 h1 {
   font-size: 3rem;
   letter-spacing: 0.9px;

@@ -1,6 +1,7 @@
 import React from "react";
 
 const MovieCard = ({ movie }) => {
+    const formattedRating = movie.Rating.toFixed(1);
     return (
         <div className="movie">
             <div>
@@ -13,7 +14,7 @@ const MovieCard = ({ movie }) => {
 
             <div>
                 <h3>{movie.Title}</h3>
-                <span>{movie.Rating}</span>
+                <span>{formattedRating}</span>
             </div>
         </div>
     );

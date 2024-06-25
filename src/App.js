@@ -36,73 +36,87 @@ const App = () => {
         }
     };
 
+    const goBackToMainPage = () => {
+        setIsOnInitialPage(true);
+        fetchPopularMovies();
+    };
+
     useEffect(() => {
         fetchPopularMovies();
     }, []);
 
     return (
-        <div className="app">
-            <h1>MovieLand</h1>
+        <>
+            <nav className="navbar">
+                <div className="navbar-links">
+                    <a href="" className="navbar-link" onClick={goBackToMainPage}>Home</a>
+                    <a href="#" className="navbar-link" onClick={() => alert('Navigate to Favorites page')}>Favorites</a>
+                </div>
+            </nav>
+            <div className="app">
 
-            <div className="search">
-                <input
-                    placeholder="Search for movies"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={keyPress}
-                />
-                <img
-                    src={SearchIcon}
-                    alt="search"
-                    onClick={() => searchMovies(searchTerm)}
-                />
+                <h1 onClick={goBackToMainPage}>MovieLand</h1>
+
+                <div className="search">
+                    <input
+                        placeholder="Search for movies"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={keyPress}
+                    />
+                    <img
+                        src={SearchIcon}
+                        alt="search"
+                        onClick={() => searchMovies(searchTerm)}
+                    />
+                </div>
+
+                {isOnInitialPage ? (
+                    <>
+                        <div className="fav_bar">
+                            <text className="text">Most Popular</text>
+                        </div>
+                        {movies?.length > 0 ? (
+                            <div className="container">
+                                {movies.map((movie) => (
+                                    <MovieCard key={movie.id} movie={{
+                                        Title: movie.title,
+                                        Year: movie.release_date,
+                                        Poster: getPosterUrl(movie.poster_path),
+                                        Rating: movie.vote_average,
+                                    }} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty">
+                                <h2>No movies found</h2>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        {movies?.length > 0 ? (
+                            <div className="container">
+                                {movies.map((movie) => (
+                                    <MovieCard key={movie.id} movie={{
+                                        Title: movie.title,
+                                        Year: movie.release_date,
+                                        Poster: getPosterUrl(movie.poster_path),
+                                        Rating: movie.vote_average,
+                                    }} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty">
+                                <h2>No movies found</h2>
+                            </div>
+                        )}
+                    </>
+                )}
+
+
             </div>
-
-            {isOnInitialPage ? (
-                <>
-                    <div className="fav_bar">
-                        <text className="text">Most Popular</text>
-                    </div>
-                    {movies?.length > 0 ? (
-                        <div className="container">
-                            {movies.map((movie) => (
-                                <MovieCard key={movie.id} movie={{
-                                    Title: movie.title,
-                                    Year: movie.release_date,
-                                    Poster: getPosterUrl(movie.poster_path),
-                                    Rating: movie.vote_average,
-                                }} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="empty">
-                            <h2>No movies found</h2>
-                        </div>
-                    )}
-                </>
-            ) : (
-                <>
-                    {movies?.length > 0 ? (
-                        <div className="container">
-                            {movies.map((movie) => (
-                                <MovieCard key={movie.id} movie={{
-                                    Title: movie.title,
-                                    Year: movie.release_date,
-                                    Poster: getPosterUrl(movie.poster_path),
-                                    Rating: movie.vote_average,
-                                }} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="empty">
-                            <h2>No movies found</h2>
-                        </div>
-                    )}
-                </>
-            )}
-
-
-        </div>
+        </>
     );
 };
 
