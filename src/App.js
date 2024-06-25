@@ -4,23 +4,32 @@ import './App.css';
 import SearchIcon from './search.svg';
 import MovieCard from "./MovieCard";
 
-// 27edcc9b
+const API_KEY_TMDB = '9d26de646d6e9bf091000b1318e9ffa6';
+const API_URL_TMDB = 'https://api.themoviedb.org/3/search/movie?api_key=' + API_KEY_TMDB;
 
-const API_URL = 'http://www.omdbapi.com?apikey=27edcc9b';
+const getPosterUrl = (path) => `https://image.tmdb.org/t/p/w200${path}`;
 
 const App = () => {
     const [movies, setMovies] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isOnInitialPage, setIsOnInitialPage] = useState(true);
 
     const searchMovies = async (title) => {
-        const response = await fetch(`${API_URL}&s=${title}`);
+        const response = await fetch(`${API_URL_TMDB}&query=${title}`);
         const data = await response.json();
 
         console.log(title);
         console.log(data);
-        setMovies(data.Search);
+        setIsOnInitialPage(false);
+        setMovies(data.results);
     }
-    
+
+    const fetchPopularMovies = async () => {
+        const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=` + API_KEY_TMDB);
+        const data = await response.json();
+        setMovies(data.results);
+    };
+
     const keyPress = (event) => {
         if (event.key === 'Enter') {
             searchMovies(searchTerm);
@@ -28,7 +37,7 @@ const App = () => {
     };
 
     useEffect(() => {
-        searchMovies("Spiderman");
+        fetchPopularMovies();
     }, []);
 
     return (
@@ -49,18 +58,50 @@ const App = () => {
                 />
             </div>
 
-            {movies?.length > 0
-                ? (
-                    <div className="container">
-                        {movies.map((movie) => (
-                            <MovieCard movie={movie} />
-                        ))}
+            {isOnInitialPage ? (
+                <>
+                    <div className="fav_bar">
+                        <text className="text">Most Popular</text>
                     </div>
-                ) : (
-                    <div className="empty">
-                        <h2>No movies found</h2>
-                    </div>
-                )}
+                    {movies?.length > 0 ? (
+                        <div className="container">
+                            {movies.map((movie) => (
+                                <MovieCard key={movie.id} movie={{
+                                    Title: movie.title,
+                                    Year: movie.release_date,
+                                    Poster: getPosterUrl(movie.poster_path),
+                                    Rating: movie.vote_average,
+                                }} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="empty">
+                            <h2>No movies found</h2>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    {movies?.length > 0 ? (
+                        <div className="container">
+                            {movies.map((movie) => (
+                                <MovieCard key={movie.id} movie={{
+                                    Title: movie.title,
+                                    Year: movie.release_date,
+                                    Poster: getPosterUrl(movie.poster_path),
+                                    Rating: movie.vote_average,
+                                }} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="empty">
+                            <h2>No movies found</h2>
+                        </div>
+                    )}
+                </>
+            )}
+
+
         </div>
     );
 };
