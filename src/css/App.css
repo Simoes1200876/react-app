@@ -113,7 +113,7 @@ h1 {
   box-shadow: 5px 5px 7px #1c1d1f, -5px -5px 7px #222527;
 }
 
-.fav_bar text {
+.fav_bar span {
   flex: 1;
   border: none;
   font-size: 1.5rem;
@@ -122,7 +122,7 @@ h1 {
   padding-right: 1rem;
 
   outline: none;
-  color: #a1a1a1;
+  color: rgb(235, 199, 169);
   background: #1f2123;
 }
 
